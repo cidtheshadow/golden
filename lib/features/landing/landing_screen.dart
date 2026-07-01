@@ -1088,20 +1088,10 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
               const SizedBox(height: 64),
               SizedBox(
                 height: 420, // Increased height to prevent bottom overflow
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: testimonials.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: isDesktop ? 400 : 320, // Card width
-                      margin: EdgeInsets.only(
-                        left: index == 0 ? 0 : 12,
-                        right: index == testimonials.length - 1 ? 0 : 12,
-                      ),
-                      child: _testimonialCard(testimonials[index]),
-                    );
-                  },
+                child: _TestimonialCarousel(
+                  testimonials: testimonials,
+                  isDesktop: isDesktop,
+                  buildCard: _testimonialCard,
                 ),
               ),
             ],
@@ -1456,6 +1446,73 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TestimonialCarousel extends StatefulWidget {
+  final List<Map<String, String>> testimonials;
+  final bool isDesktop;
+  final Widget Function(Map<String, String>) buildCard;
+
+  const _TestimonialCarousel({
+    Key? key,
+    required this.testimonials,
+    required this.isDesktop,
+    required this.buildCard,
+  }) : super(key: key);
+
+  @override
+  State<_TestimonialCarousel> createState() => _TestimonialCarouselState();
+}
+
+class _TestimonialCarouselState extends State<_TestimonialCarousel> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(
+      viewportFraction: widget.isDesktop ? 0.35 : 0.85,
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      controller: _pageController,
+      physics: const BouncingScrollPhysics(),
+      itemCount: widget.testimonials.length,
+      itemBuilder: (context, index) {
+        return AnimatedBuilder(
+          animation: _pageController,
+          builder: (context, child) {
+            double value = 1.0;
+            if (_pageController.position.haveDimensions) {
+              value = _pageController.page! - index;
+              value = (1 - (value.abs() * 0.15)).clamp(0.85, 1.0);
+            } else {
+              value = index == 0 ? 1.0 : 0.85;
+            }
+            return Center(
+              child: Transform.scale(
+                scale: value,
+                child: child,
+              ),
+            );
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            child: widget.buildCard(widget.testimonials[index]),
+          ),
+        );
+      },
     );
   }
 }
