@@ -19,7 +19,7 @@ class LegalPolicyScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         backgroundColor: GCColors.background,
-        iconTheme: const IconThemeData(color: GCColors.foreground),
+        automaticallyImplyLeading: false, // Remove default back button
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: GCSpacing.md, vertical: GCSpacing.xl),
@@ -39,15 +39,46 @@ class LegalPolicyScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              child: MarkdownBody(
-                data: content,
-                styleSheet: MarkdownStyleSheet(
-                  h1: GCTypography.displayMedium.copyWith(color: GCColors.primary),
-                  h2: GCTypography.headlineMedium.copyWith(color: GCColors.foreground),
-                  p: GCTypography.bodyLarge.copyWith(height: 1.6, color: GCColors.foreground.withAlpha(220)),
-                  listBullet: GCTypography.bodyLarge.copyWith(color: GCColors.primary),
-                  strong: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(24),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.arrow_back, size: 20, color: GCColors.foreground),
+                          const SizedBox(width: 8),
+                          Text(
+                            "Back",
+                            style: GCTypography.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: GCColors.foreground,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: GCSpacing.xl),
+                  MarkdownBody(
+                    data: content,
+                    styleSheet: MarkdownStyleSheet(
+                      h1: GCTypography.displayMedium.copyWith(color: GCColors.primary),
+                      h2: GCTypography.headlineMedium.copyWith(color: GCColors.foreground),
+                      p: GCTypography.bodyLarge.copyWith(height: 1.6, color: GCColors.foreground.withAlpha(220)),
+                      listBullet: GCTypography.bodyLarge.copyWith(color: GCColors.primary),
+                      strong: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

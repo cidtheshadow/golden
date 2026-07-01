@@ -36,6 +36,8 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
   final _servicesKey = GlobalKey();
   final _howItWorksKey = GlobalKey();
   final _platformHighlightsKey = GlobalKey();
+  final _trustSafetyKey = GlobalKey();
+  final _faqKey = GlobalKey();
 
   @override
   void initState() {
@@ -178,9 +180,9 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   const SizedBox(width: 24),
                   _navLink('How It Works', () => _scrollToKey(_howItWorksKey)),
                   const SizedBox(width: 24),
-                  _navLink('Trust & Safety', () {}), // Add scroll key later
+                  _navLink('Trust & Safety', () => _scrollToKey(_trustSafetyKey)),
                   const SizedBox(width: 24),
-                  _navLink('FAQ', () {}), // Add scroll key later
+                  _navLink('FAQ', () => _scrollToKey(_faqKey)),
                   const SizedBox(width: 48),
 
                   // Phone
@@ -772,7 +774,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Widget _buildTrustSafetySection(bool isDesktop, double horizontalPadding) {
     return Container(
-      key: _servicesKey,
+      key: _trustSafetyKey,
       width: double.infinity,
       color: GCColors.foreground, // Dark Green Background
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 80),
@@ -1190,6 +1192,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
     ];
 
     return Container(
+      key: _faqKey,
       width: double.infinity,
       color: GCColors.background,
       padding: EdgeInsets.symmetric(
