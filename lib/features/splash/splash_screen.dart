@@ -65,36 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
-            // Text Animation
-            const Text(
-              'GoldenCare',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Playfair Display',
-                color: GCColors.primary,
-                letterSpacing: 1.2,
-              ),
-            )
-                .animate(delay: 1800.ms)
-                .fade(duration: 800.ms)
-                .slideY(
-                    begin: 0.3,
-                    end: 0,
-                    duration: 800.ms,
-                    curve: Curves.easeOutCubic),
 
-            const SizedBox(height: 12),
-
-            const Text(
-              'Compassionate Care at Home',
-              style: TextStyle(
-                fontSize: 14,
-                color: GCColors.mutedForeground,
-                letterSpacing: 0.5,
-              ),
-            ).animate(delay: 2200.ms).fade(duration: 800.ms),
           ],
         ),
       ),

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../core/colors.dart';
-import '../core/spacing.dart';
-
 class HeroSection extends StatelessWidget {
   final VoidCallback onOpenConsultation;
 
@@ -13,49 +10,50 @@ class HeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Container(
       width: double.infinity,
-      color: GCColors.background,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 32, // Better padding for max-width
-        vertical: 80,
+      color: const Color(0xFFFAF6EE), // exact beige from screenshot
+      padding: const EdgeInsets.only(
+        top: 64,
+        bottom: 64,
       ),
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 1280),
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final isDesktop = constraints.maxWidth >= 900;
-              
-              if (isDesktop) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(flex: 11, child: _buildTextContent(context, textTheme)),
-                    const SizedBox(width: 64),
-                    Expanded(flex: 10, child: _buildImageContent()),
-                  ],
-                );
-              } else {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildTextContent(context, textTheme),
-                    const SizedBox(height: 64),
-                    _buildImageContent(),
-                  ],
-                );
-              }
-            },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isDesktop = constraints.maxWidth >= 900;
+                
+                if (isDesktop) {
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(flex: 11, child: _buildTextContent(context)),
+                      const SizedBox(width: 64),
+                      Expanded(flex: 10, child: _buildImageContent()),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _buildTextContent(context),
+                      const SizedBox(height: 64),
+                      _buildImageContent(),
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildTextContent(BuildContext context, TextTheme textTheme) {
+  Widget _buildTextContent(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,64 +61,67 @@ class HeroSection extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: GCColors.secondary,
+            color: const Color(0xFFE3ECE1), // Light sage green
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: GCColors.primary.withAlpha(51)), // 20% opacity
+            border: Border.all(color: const Color(0xFF5A6844).withAlpha(30)),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.shield_outlined, size: 16, color: GCColors.primary),
+              const Icon(Icons.shield_outlined, size: 16, color: Color(0xFF5A6844)),
               const SizedBox(width: 8),
               Text(
                 "India's Most Trusted Care Network",
-                style: textTheme.labelSmall?.copyWith(
-                  color: GCColors.primary,
+                style: const TextStyle(
+                  color: Color(0xFF5A6844),
                   fontWeight: FontWeight.w600,
+                  fontSize: 12,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: GCSpacing.lg),
+        const SizedBox(height: 32),
         
         // Headline
         RichText(
-          text: TextSpan(
-            style: textTheme.displayMedium?.copyWith(
-              color: GCColors.foreground,
+          text: const TextSpan(
+            style: TextStyle(
+              fontFamily: 'Playfair Display', // Serif font from screenshot
+              color: Color(0xFF2D3325),
               height: 1.1,
-              fontWeight: FontWeight.w700,
-              fontSize: 56, // Large display size
+              fontWeight: FontWeight.w800,
+              fontSize: 64, // Large display size
             ),
-            children: const [
+            children: [
               TextSpan(text: "Compassionate\nelder care,\n"),
-              TextSpan(text: "right at home.", style: TextStyle(color: GCColors.primary)),
+              TextSpan(text: "right at home.", style: TextStyle(color: Color(0xFF5A6844))),
             ],
           ),
         ),
-        const SizedBox(height: GCSpacing.lg),
+        const SizedBox(height: 24),
         
         // Subheadline
-        Text(
+        const Text(
           "We provide vetted, trained caregivers and nursing support so your aging parents can live safely and with dignity in the comfort of their own home.",
-          style: textTheme.bodyLarge?.copyWith(
-            color: GCColors.mutedForeground,
-            height: 1.5,
+          style: TextStyle(
+            color: Color(0xFF5C6450),
+            height: 1.6,
             fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: GCSpacing.xl),
+        const SizedBox(height: 40),
         
         // CTA Buttons
         Wrap(
-          spacing: GCSpacing.md,
-          runSpacing: GCSpacing.md,
+          spacing: 16,
+          runSpacing: 16,
           children: [
             ElevatedButton(
               onPressed: onOpenConsultation,
               style: ElevatedButton.styleFrom(
-                backgroundColor: GCColors.primary,
+                backgroundColor: const Color(0xFF5A6844),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
                 shape: RoundedRectangleBorder(
@@ -128,18 +129,18 @@ class HeroSection extends StatelessWidget {
                 ),
                 elevation: 0,
               ),
-              child: const Text("Book a free consultation", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+              child: const Text("Book a free consultation", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ),
             ElevatedButton.icon(
               onPressed: () {},
-              icon: Icon(Icons.phone_outlined, size: 20, color: GCColors.foreground),
-              label: Text("1800-123-4567", style: TextStyle(color: GCColors.foreground, fontWeight: FontWeight.w600, fontSize: 16)),
+              icon: const Icon(Icons.phone_outlined, size: 20, color: Color(0xFF2D3325)),
+              label: const Text("1800-123-4567", style: TextStyle(color: Color(0xFF2D3325), fontWeight: FontWeight.bold, fontSize: 16)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                foregroundColor: GCColors.foreground,
+                foregroundColor: const Color(0xFF2D3325),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-                elevation: 1,
-                shadowColor: Colors.black12,
+                elevation: 0, // Flat outline style like screenshot
+                side: const BorderSide(color: Color(0xFFE7DFD4)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -148,23 +149,23 @@ class HeroSection extends StatelessWidget {
           ],
         ),
         
-        const SizedBox(height: GCSpacing.xl),
+        const SizedBox(height: 48),
         
         // Trust indicators
         Row(
           children: [
-            Icon(Icons.shield_outlined, size: 16, color: GCColors.accent),
+            const Icon(Icons.shield_outlined, size: 16, color: Color(0xFF5A6844)),
             const SizedBox(width: 8),
-            Text(
+            const Text(
               "100% Police Verified",
-              style: textTheme.labelSmall?.copyWith(color: GCColors.mutedForeground),
+              style: TextStyle(color: Color(0xFF5C6450), fontSize: 12, fontWeight: FontWeight.bold),
             ),
             const SizedBox(width: 24),
-            Icon(Icons.shield_outlined, size: 16, color: GCColors.accent),
+            const Icon(Icons.shield_outlined, size: 16, color: Color(0xFF5A6844)),
             const SizedBox(width: 8),
-            Text(
+            const Text(
               "Nurse Supervised",
-              style: textTheme.labelSmall?.copyWith(color: GCColors.mutedForeground),
+              style: TextStyle(color: Color(0xFF5C6450), fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -174,18 +175,24 @@ class HeroSection extends StatelessWidget {
 
   Widget _buildImageContent() {
     return Padding(
-      padding: const EdgeInsets.only(right: 16, bottom: 16),
+      padding: const EdgeInsets.only(right: 32, top: 32),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Offset Background Blob
-          Positioned.fill(
-            child: Transform.translate(
-              offset: const Offset(16, 16),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: GCColors.secondary,
-                  borderRadius: BorderRadius.circular(48),
+          // Offset Background Blob (shifted right and up as seen in screenshot)
+          Positioned(
+            top: -32,
+            bottom: -64,
+            left: 48,
+            right: -120, // Extends far to the right edge
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFE3ECE1), // Light sage green
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(64),
+                  bottomLeft: Radius.circular(64),
+                  topRight: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
                 ),
               ),
             ),
@@ -196,12 +203,12 @@ class HeroSection extends StatelessWidget {
             child: Image.asset(
               'assets/images/hero_premium.png',
               width: double.infinity,
-              height: 500,
+              height: 550,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Container(
-                color: GCColors.muted,
+                color: const Color(0xFFD1E0CE),
                 width: double.infinity,
-                height: 500,
+                height: 550,
                 child: const Center(
                   child: Icon(Icons.image_not_supported, size: 48, color: Colors.grey),
                 ),
