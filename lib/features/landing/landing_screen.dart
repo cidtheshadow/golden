@@ -1494,7 +1494,7 @@ class _TestimonialCarouselState extends State<_TestimonialCarousel> {
           animation: _pageController,
           builder: (context, child) {
             double value = 1.0;
-            if (_pageController.position.haveDimensions) {
+            if (_pageController.hasClients && _pageController.position.haveDimensions) {
               value = _pageController.page! - index;
               value = (1 - (value.abs() * 0.15)).clamp(0.85, 1.0);
             } else {
