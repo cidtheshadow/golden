@@ -18,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToHome() async {
-    // Wait for the full animation to complete
-    await Future<void>.delayed(const Duration(seconds: 3, milliseconds: 500));
+    // Wait exactly for the 1.6s animation to finish
+    await Future<void>.delayed(const Duration(milliseconds: 1600));
     if (mounted) {
       context.go('/');
     }
