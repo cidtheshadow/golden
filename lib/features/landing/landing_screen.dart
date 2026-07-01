@@ -75,28 +75,33 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
     final horizontalPadding =
         isDesktop ? GCSpacing.pagePaddingDesktop : GCSpacing.pagePaddingMobile;
 
+    final sections = [
+      const SizedBox(height: 80),
+      HeroSection(onOpenConsultation: () => context.push('/book')),
+      _buildStatsSection(isDesktop, horizontalPadding),
+      _buildTrustSafetySection(isDesktop, horizontalPadding),
+      _buildProcessSection(isDesktop, horizontalPadding),
+      _buildTestimonialsSection(isDesktop, horizontalPadding),
+      _buildFAQSection(isDesktop, horizontalPadding),
+      _buildFooter(isDesktop, horizontalPadding),
+    ];
+
     return Scaffold(
       backgroundColor: GCColors.background,
       body: Stack(
         children: [
           // ── Main scrollable content ──────────────
-          SingleChildScrollView(
+          ListView.builder(
             controller: _scrollController,
-            physics:
-                const AlwaysScrollableScrollPhysics(), // Ensure scrolling is always enabled
-            child: Column(
-              children: [
-                // Space for fixed nav bar
-                const SizedBox(height: 80),
-                HeroSection(onOpenConsultation: () => context.push('/book')),
-                _buildStatsSection(isDesktop, horizontalPadding),
-                _buildTrustSafetySection(isDesktop, horizontalPadding),
-                _buildProcessSection(isDesktop, horizontalPadding),
-                _buildTestimonialsSection(isDesktop, horizontalPadding),
-                _buildFAQSection(isDesktop, horizontalPadding),
-                _buildFooter(isDesktop, horizontalPadding),
-              ],
-            ),
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: sections.length,
+            itemBuilder: (context, index) {
+              if (index == 0) return sections[index]; // Skip spacer animation
+              return sections[index]
+                  .animate()
+                  .fadeIn(duration: 600.ms, curve: Curves.easeOut)
+                  .slideY(begin: 0.1, end: 0, duration: 600.ms, curve: Curves.easeOut);
+            },
           ),
 
           // ── Fixed top nav bar ───────────────────
@@ -1081,26 +1086,24 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   style: GCTypography.displayMedium.copyWith(color: GCColors.foreground),
                   textAlign: TextAlign.center),
               const SizedBox(height: 64),
-              isDesktop
-                  ? Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: testimonials
-                          .map((t) => Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                                  child: _testimonialCard(t),
-                                ),
-                              ))
-                          .toList(),
-                    )
-                  : Column(
-                      children: testimonials
-                          .map((t) => Padding(
-                                padding: const EdgeInsets.only(bottom: 24),
-                                child: _testimonialCard(t),
-                              ))
-                          .toList(),
-                    ),
+              SizedBox(
+                height: 380, // Fixed height for carousel cards
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: testimonials.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: isDesktop ? 400 : 320, // Card width
+                      margin: EdgeInsets.only(
+                        left: index == 0 ? 0 : 12,
+                        right: index == testimonials.length - 1 ? 0 : 12,
+                      ),
+                      child: _testimonialCard(testimonials[index]),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
