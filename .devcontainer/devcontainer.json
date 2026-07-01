@@ -1,0 +1,83 @@
+{
+  "name": "GoldenCare App - Flutter Dev",
+
+  // Use the pre-built local image — has Flutter 3.32, Android SDK, Firebase CLI, Java 17/21
+  "image": "vsc-goldencare_app-54f16ea4521ce9923a2622f3b0bc43b647df25c497b1b244e7a2bfa56c9f7987",
+
+  // Run as root (the image default; no extra user setup needed)
+  "remoteUser": "root",
+
+  // Workspace is mounted at /workspace in this image
+  "workspaceFolder": "/workspace",
+
+  // Persist gradle cache, pub cache, and android-sdk across rebuilds
+  "mounts": [
+    "source=goldencare-gradle,target=/root/.gradle,type=volume",
+    "source=goldencare-pub-cache,target=/root/.pub-cache,type=volume",
+    "source=goldencare-android-sdk,target=/opt/android-sdk,type=volume"
+  ],
+
+  // VS Code settings inside the container
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "dart.flutterSdkPath": "/sdks/flutter",
+        "dart.sdkPath": "/sdks/flutter/bin/cache/dart-sdk",
+        "editor.formatOnSave": true,
+        "editor.rulers": [80],
+        "[dart]": {
+          "editor.defaultFormatter": "Dart-Code.dart-code",
+          "editor.formatOnSave": true,
+          "editor.tabSize": 2
+        },
+        "files.watcherExclude": {
+          "**/build/**": true,
+          "**/.dart_tool/**": true
+        },
+        "terminal.integrated.defaultProfile.linux": "bash"
+      },
+      "extensions": [
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "nash.awesome-flutter-snippets",
+        "usernamehw.errorlens",
+        "eamodio.gitlens",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-json",
+        "visualstudioexptteam.vscodeintellicode",
+        "streetsidesoftware.code-spell-checker"
+      ]
+    }
+  },
+
+  // Forward ports: Flutter web dev server and Firebase emulators
+  "forwardPorts": [
+    3000,
+    4000,
+    5001,
+    8080,
+    9099,
+    9199,
+    9000
+  ],
+  "portsAttributes": {
+    "3000": { "label": "Flutter Web", "onAutoForward": "openBrowser" },
+    "4000": { "label": "Firebase Emulator Hub" },
+    "5001": { "label": "Firebase Functions" },
+    "8080": { "label": "Firestore Emulator" },
+    "9099": { "label": "Firebase Auth Emulator" },
+    "9199": { "label": "Firebase Storage Emulator" }
+  },
+
+  // Run after container is created
+  "postCreateCommand": "flutter pub get && cd functions && npm install",
+
+  // Correct SDK paths to match the image layout
+  "remoteEnv": {
+    "JAVA_HOME": "/usr/lib/jvm/java-17-openjdk-amd64",
+    "FLUTTER_HOME": "/sdks/flutter",
+    "ANDROID_HOME": "/opt/android-sdk",
+    "PATH": "${containerEnv:PATH}:/sdks/flutter/bin:/sdks/flutter/bin/cache/dart-sdk/bin:/root/.pub-cache/bin"
+  }
+}

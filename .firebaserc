@@ -1,0 +1,21 @@
+{
+  "projects": {
+    "default": "golden-care-d4863"
+  },
+  "targets": {
+    "golden-care-d4863": {
+      "hosting": {
+        "production": [
+          "golden-care-d4863"
+        ],
+        "testing": [
+          "golden-care-testing"
+        ],
+        "golden-care-admin": [
+          "golden-care-admin"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

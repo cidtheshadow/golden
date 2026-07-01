@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Network Security Configuration for Golden Care
+  - Enforces HTTPS for all connections
+  - Pins certificates for critical domains (Firebase, Google APIs, Razorpay)
+  - Blocks all cleartext (HTTP) traffic
+-->
+<network-security-config>
+    <!-- Block cleartext (HTTP) globally -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Pin Firebase domains -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">firebaseio.com</domain>
+        <domain includeSubdomains="true">googleapis.com</domain>
+        <domain includeSubdomains="true">firebaseapp.com</domain>
+        <domain includeSubdomains="true">cloudfunctions.net</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Pin Razorpay domains -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">razorpay.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Pin Google Maps domains -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">maps.googleapis.com</domain>
+        <domain includeSubdomains="true">maps.google.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

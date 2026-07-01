@@ -1,0 +1,102 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── HELPER FUNCTIONS ───────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/admin_role_users/$(request.auth.token.email));
+    }
+
+    // ─── USERS ──────────────────────────────────────────────────────
+    match /users/{userId} {
+      allow read, update: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId);
+      allow delete: if isAdmin();
+
+      // Notifications subcollection — user owns their own
+      match /notifications/{notificationId} {
+        allow read: if isSignedIn() && isOwner(userId);
+        allow write: if isAdmin();
+      }
+    }
+
+    // ─── BOOKINGS ───────────────────────────────────────────────────
+    match /bookings/{bookingId} {
+      allow read: if isSignedIn() &&
+        (resource.data.userId == request.auth.uid ||
+         resource.data.servicePersonnelId == request.auth.uid ||
+         isAdmin());
+      allow create: if isSignedIn() &&
+        request.resource.data.userId == request.auth.uid;
+      allow update: if isSignedIn() &&
+        (resource.data.userId == request.auth.uid ||
+         resource.data.servicePersonnelId == request.auth.uid ||
+         isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // ─── SERVICES ───────────────────────────────────────────────────
+    match /services/{serviceId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ─── SERVICE PERSONNEL ──────────────────────────────────────────
+    match /servicePersonnel/{personnelId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isOwner(personnelId);
+      allow delete: if isAdmin();
+
+      // Personnel notifications subcollection
+      match /notifications/{notificationId} {
+        allow read: if isSignedIn() && isOwner(personnelId);
+        allow write: if isAdmin();
+      }
+    }
+
+    // ─── TRANSACTIONS ───────────────────────────────────────────────
+    match /transactions/{transactionId} {
+      allow read: if isSignedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() &&
+        request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // ─── CONFIG ─────────────────────────────────────────────────────
+    match /config/{configId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ─── ADMIN AUDIT LOGS ───────────────────────────────────────────
+    match /admin_audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ─── ADMIN ROLE USERS ───────────────────────────────────────────
+    match /admin_role_users/{userId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ─── WHITELISTED PARTNERS ───────────────────────────────────────
+    match /whitelisted_partners/{partnerId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    // ─── DEFAULT DENY ───────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,76 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains build artifacts and other generated files that may conflict with future runs.
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# # Android Studio will automatically add this to its ignore list when the platform is loaded.
+# *.key
+# *.keystore
+# *.jks
+google-services.json
+.env
+.env.*
+
+# Signing and secrets — NEVER commit these
+# android/key.properties
+# android/app/upload-keystore.jks
+# /key.properties
+# /.env.android_signing
+# android/local.properties
+# ios/Runner/GoogleService-Info.plist
+# functions/.env
+
+node_modules/
+functions/node_modules/
+
+venv/
+
+# Project-specific additions discovered by analysis
+# Firebase CLI and temp/exports
+.firebase/
+firebase-debug.log
+remoteconfig.json
+rc_*.json
+
+# Generated Flutter files that should not be committed
+.flutter-plugins-dependencies
+.packages
+
+# Local service account / credentials patterns (avoid ignoring all JSON)
+# serviceAccount*.json
+# *service_account*.json
+credentials.json
