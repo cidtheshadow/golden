@@ -114,29 +114,35 @@ class _AuthScreenState extends ConsumerState<AuthScreen>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                  icon: const Icon(Icons.arrow_back),
-                                  onPressed: () {
-                                    if (context.canPop()) {
-                                      context.pop();
-                                    } else {
-                                      context.go('/');
-                                    }
-                                  },
+                          SizedBox(
+                            width: double.infinity,
+                            height: 64,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: IconButton(
+                                    icon: const Icon(Icons.arrow_back),
+                                    onPressed: () {
+                                      if (context.canPop()) {
+                                        context.pop();
+                                      } else {
+                                        context.go('/');
+                                      }
+                                    },
+                                  ),
                                 ),
-                              ),
-                              // Logo
-                              Image.asset(
-                                'assets/images/logo.png',
-                                width: 64,
-                                height: 64,
-                              ).animate().fade().scale(curve: Curves.easeOutBack),
-                            ],
+                                // Logo
+                                Image.asset(
+                                  'assets/images/logo.png',
+                                  width: 64,
+                                  height: 64,
+                                ).animate().fade().scale(curve: Curves.easeOutBack),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           Text(
