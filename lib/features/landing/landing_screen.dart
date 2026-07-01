@@ -1087,7 +1087,7 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
                   textAlign: TextAlign.center),
               const SizedBox(height: 64),
               SizedBox(
-                height: 380, // Fixed height for carousel cards
+                height: 420, // Increased height to prevent bottom overflow
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
