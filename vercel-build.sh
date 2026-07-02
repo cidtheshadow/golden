@@ -1,7 +1,6 @@
 #!/bin/bash
-# Download and install Flutter for Vercel build
-echo "Downloading Flutter SDK..."
-curl -sL https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.22.2-stable.tar.xz | tar xJ
+echo "Downloading latest Flutter SDK (stable)..."
+git clone https://github.com/flutter/flutter.git -b stable --depth 1
 export PATH="$PATH:`pwd`/flutter/bin"
 
 echo "Configuring Git to fix dubious ownership on Vercel..."
