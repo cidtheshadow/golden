@@ -18,8 +18,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _navigateToHome() async {
-    // Wait exactly for the 1.6s animation to finish
-    await Future<void>.delayed(const Duration(milliseconds: 1600));
+    try {
+      // Precache large images during the splash screen animation
+      final precacheFutures = [
+        precacheImage(const AssetImage('assets/images/logo.png'), context),
+        precacheImage(const AssetImage('assets/images/hero_premium.png'), context),
+      ];
+
+      // Wait for both the minimum 1.6s animation and image loading
+      await Future.wait([
+        Future<void>.delayed(const Duration(milliseconds: 1600)),
+        ...precacheFutures,
+      ]);
+    } catch (e) {
+      // If precaching fails, fallback to standard delay
+      await Future<void>.delayed(const Duration(milliseconds: 1600));
+    }
+
     if (mounted) {
       context.go('/');
     }
