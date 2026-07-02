@@ -91,17 +91,18 @@ class _LandingScreenState extends ConsumerState<LandingScreen> {
       body: Stack(
         children: [
           // ── Main scrollable content ──────────────
-          ListView.builder(
+          SingleChildScrollView(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: sections.length,
-            itemBuilder: (context, index) {
-              if (index == 0) return sections[index]; // Skip spacer animation
-              return sections[index]
-                  .animate()
-                  .fadeIn(duration: 600.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.1, end: 0, duration: 600.ms, curve: Curves.easeOut);
-            },
+            child: Column(
+              children: sections.asMap().entries.map((entry) {
+                if (entry.key == 0) return entry.value; // Skip spacer animation
+                return entry.value
+                    .animate()
+                    .fadeIn(duration: 600.ms, curve: Curves.easeOut)
+                    .slideY(begin: 0.1, end: 0, duration: 600.ms, curve: Curves.easeOut);
+              }).toList(),
+            ),
           ),
 
           // ── Fixed top nav bar ───────────────────
